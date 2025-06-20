@@ -41,7 +41,7 @@ Currently, we have **one script** available, with more planned for the future:
 
 ### 🔄 Application Update Scripts
 
-- **xcopy-update/** - **Windows Application Updater**
+- **[xcopy-update/](xcopy-update/)** - **Windows Application Updater**
   - Automatically updates applications on user workstations from network locations
   - Uses RoboCopy for reliable, efficient file synchronization
   - Designed for deployment via login scripts or manual execution

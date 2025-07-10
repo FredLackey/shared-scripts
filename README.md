@@ -27,4 +27,14 @@ A Windows batch script for updating an application from a source to a destinatio
 
 ## License
 
-This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details. 
+This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+
+## 📞 Need Help?
+
+If you run into problems or have questions about any of the scripts in this repository, please feel free to reach out.
+
+### 📧 Contact Information
+
+**Fred Lackey**  
+📧 Email: [Fred.Lackey@gmail.com](mailto:Fred.Lackey@gmail.com)  
+🌐 Website: [@FredLackey.com](https://FredLackey.com) 

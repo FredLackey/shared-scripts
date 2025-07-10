@@ -1,4 +1,4 @@
-# AWS CloudFront Full Deployment Script
+# AWS CloudFront Deployment Script for Vite/React
 
 ## 🎯 What Does This Do?
 

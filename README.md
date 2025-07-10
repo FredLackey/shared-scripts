@@ -2,7 +2,7 @@
 
 This repository contains a collection of scripts for various administrative and deployment tasks. Each script is located in its own directory and includes detailed documentation.
 
-##  Scripts
+## Scripts
 
 ### CloudFront Deploy for React (`cloudfront-deploy-react`)
 
@@ -10,6 +10,20 @@ Automates the complete deployment of a Vite-based React application to AWS S3 an
 
 -   [Go to script](./cloudfront-deploy-react/)
 -   [Read the guide](./cloudfront-deploy-react/README.md)
+
+### CloudFront Add Domain (`cloudfront-add-domain`)
+
+Automates adding a custom domain and SSL certificate (via ACM) to an existing CloudFront distribution.
+
+-   [Go to script](./cloudfront-add-domain/)
+-   [Read the guide](./cloudfront-add-domain/README.md)
+
+### CloudFront Info (`cloudfront-info`)
+
+A utility to find and display the details of a CloudFront distribution by searching for its S3 origin bucket name.
+
+-   [Go to script](./cloudfront-info/)
+-   [Read the guide](./cloudfront-info/README.md)
 
 ### CloudFront Remove (`cloudfront-remove`)
 

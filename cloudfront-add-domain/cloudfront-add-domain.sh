@@ -4,6 +4,15 @@
 # ADD CUSTOM DOMAIN TO AWS CLOUDFRONT
 # ==============================================================================
 #
+# Author:
+# Fred Lackey
+# Fred.Lackey@gmail.com
+# https://FredLackey.com
+#
+# Disclaimer:
+# This script is provided "as is", without warranty of any kind.
+# Please feel free to contact me with any questions.
+#
 # Description:
 # This script automates adding a custom domain (FQDN) to an existing AWS
 # CloudFront distribution. It handles requesting an SSL certificate from AWS

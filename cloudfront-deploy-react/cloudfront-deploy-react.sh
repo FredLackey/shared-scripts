@@ -4,6 +4,15 @@
 # DEPLOY TO AWS CLOUDFRONT (WITH FULL AUTOMATION)
 # ==============================================================================
 #
+# Author:
+# Fred Lackey
+# Fred.Lackey@gmail.com
+# https://FredLackey.com
+#
+# Disclaimer:
+# This script is provided "as is", without warranty of any kind.
+# Please feel free to contact me with any questions.
+#
 # Description:
 # This script automates the complete setup and deployment of the Vite static
 # website to AWS. It is idempotent, meaning it can be run multiple times.

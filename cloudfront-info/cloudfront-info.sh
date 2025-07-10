@@ -4,6 +4,15 @@
 # FETCH AWS CLOUDFRONT DISTRIBUTION INFO
 # ==============================================================================
 #
+# Author:
+# Fred Lackey
+# Fred.Lackey@gmail.com
+# https://FredLackey.com
+#
+# Disclaimer:
+# This script is provided "as is", without warranty of any kind.
+# Please feel free to contact me with any questions.
+#
 # Description:
 # This script finds and displays information about a CloudFront distribution
 # by searching for its S3 bucket origin.

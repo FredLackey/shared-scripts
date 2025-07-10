@@ -1,26 +1,26 @@
 #!/bin/bash
 
 # ==============================================================================
-# TEARDOWN AWS RESOURCES
+# AWS CLOUDFRONT TEARDOWN SCRIPT
 # ==============================================================================
 #
+# Author:
+# Fred Lackey
+# Fred.Lackey@gmail.com
+# https://FredLackey.com
+#
+# Disclaimer:
+# This script is provided "as is", without warranty of any kind.
+# Please feel free to contact me with any questions.
+#
 # Description:
-# This script finds and deletes all AWS resources created by the
-# 'deploy-cloudfront.sh' script. It is designed to be a complete cleanup
-# utility.
-#
-# WARNING:
-# This script is DESTRUCTIVE. It will permanently delete AWS resources.
-# This action cannot be undone. Please be certain before proceeding.
-#
-# The script will find resources based on the S3 bucket name you provide.
-# It will then ask for a final confirmation before deleting anything.
-#
-# The CloudFront deletion process can take 15-20 minutes as it requires
-# disabling the distribution before it can be deleted. Please be patient.
+# This script finds and permanently deletes all AWS resources associated with
+# a CloudFront deployment. It is DESTRUCTIVE and should be used with caution.
+# It identifies resources based on the S3 bucket name used as the origin.
 #
 # Prerequisites:
 # - AWS CLI must be installed.
+# - jq (command-line JSON processor) must be installed.
 #
 # Usage:
 # ./cloudfront-remove.sh

@@ -1,6 +1,23 @@
 @echo off
 REM ============================================================================
-REM UpdateApp.bat - Automatic Application Update Script
+REM XCopy App Updater
+REM ============================================================================
+REM
+REM Author:
+REM Fred Lackey
+REM Fred.Lackey@gmail.com
+REM https://FredLackey.com
+REM
+REM Disclaimer:
+REM This script is provided "as is", without warranty of any kind.
+REM Please feel free to contact me with any questions.
+REM
+REM Description:
+REM This script updates an application from a source to a destination directory.
+REM It creates a backup of the existing application before updating.
+REM It's designed to be run from a user's machine to pull updates from a
+REM network share.
+REM
 REM ============================================================================
 REM This script uses RoboCopy to safely update application files from a
 REM network location to the local machine. It only copies files that have

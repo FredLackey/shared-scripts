@@ -1,24 +1,22 @@
 # Shared Scripts & Utilities
 
-Welcome to my collection of helpful scripts, utilities, and small applications! This repository contains various tools I've created to help friends and family members with common tasks and scenarios.
+This repository contains a collection of scripts, utilities, and small applications designed to automate or simplify common developer and administrative tasks.
 
 ## 🎯 What's This All About?
 
 This is a growing collection of:
-- **Windows Scripts** - Batch files and PowerShell scripts for Windows users
-- **JavaScript Utilities** - Simple web-based tools and Node.js scripts
-- **Small Applications** - Lightweight programs to solve specific problems
-- **Helpful Tools** - Anything that makes daily tasks easier
+- **Windows Scripts** - Batch and PowerShell scripts for Windows environments.
+- **Cloud Scripts** - Utilities for managing cloud infrastructure (e.g., AWS).
+- **JavaScript Utilities** - Simple web-based tools and Node.js scripts.
+- **Small Applications** - Lightweight programs for specific problems.
 
 ## 🌟 Philosophy
 
-All scripts and utilities in this repository are designed with **simplicity** and **clarity** in mind:
-
-- ✅ **Easy to understand** - Even if you're not technical
-- ✅ **Well-commented** - Every script explains what it does
-- ✅ **Step-by-step instructions** - Clear README files for each tool
-- ✅ **Safe to use** - Thoroughly tested and documented
-- ✅ **Family-friendly** - Written for real people, not just programmers
+All scripts and utilities in this repository are designed for **simplicity** and **clarity**:
+- Straightforward and easy to understand
+- Well-commented to explain the "why" behind the code
+- Accompanied by clear, step-by-step README files
+- Thoroughly tested and documented
 
 ## 📁 Repository Structure
 
@@ -30,14 +28,22 @@ Each script or utility will have its own folder with:
 
 ## 🚀 Getting Started
 
-1. **Browse the folders** - Each one contains a different tool or script
-2. **Read the README** - Every folder has instructions specific to that tool
-3. **Follow the steps** - Each README provides step-by-step guidance
-4. **Ask questions** - Don't hesitate to reach out if you need help!
+1. **Browse the folders** to find the script or utility you need.
+2. **Read the `README.md`** in the tool's folder for specific instructions.
+3. **Follow the steps** to execute the tool.
+4. **Ask questions** if you encounter any issues.
 
 ## 📋 Available Scripts & Tools
 
-Currently, we have **one script** available, with more planned for the future:
+The following scripts & tools are available, with more planned for the future.
+
+### ☁️ AWS CloudFront Scripts
+
+- **[cloudfront-remove/](cloudfront-remove/)** - **AWS CloudFront Teardown**
+  - **WARNING:** This script is DESTRUCTIVE and permanently deletes resources.
+  - Automates the complete removal of a CloudFront distribution, S3 bucket, and Origin Access Control (OAC).
+  - Designed for developers and administrators to clean up test/staging environments or decommission projects.
+  - Sequences deletion operations correctly and waits for CloudFront to disable before removal.
 
 ### 🔄 Application Update Scripts
 
@@ -51,12 +57,7 @@ Currently, we have **one script** available, with more planned for the future:
 
 ### 🚀 Coming Soon
 
-More helpful scripts and utilities are in development! Future additions may include:
-- File cleanup and maintenance scripts
-- System configuration utilities  
-- Network connectivity helpers
-- Data backup and synchronization tools
-- And whatever challenges come up that need solving!
+More helpful scripts and utilities are always in development. Future additions may include file and system maintenance scripts, network helpers, and data synchronization tools.
 
 *Each new script will follow the same philosophy: simple, well-documented, and family-friendly.*
 

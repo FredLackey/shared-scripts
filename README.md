@@ -32,6 +32,13 @@ A destructive script that finds and permanently deletes all AWS resources associ
 -   [Go to script](./cloudfront-remove/)
 -   [Read the guide](./cloudfront-remove/README.md)
 
+### Route 53 Takeover (`route53-takeover`)
+
+Infrastructure-as-Code for managing Route 53 DNS zones and records using Terraform. Designed to take over existing DNS zones or create new ones with comprehensive DNS record management capabilities. Includes zone extraction tools for importing existing configurations.
+
+-   [Go to script](./route53-takeover/)
+-   [Read the guide](./route53-takeover/README.md)
+
 ### XCopy Update (`xcopy-update`)
 
 A Windows batch script for updating an application from a source to a destination directory, with built-in backup functionality.

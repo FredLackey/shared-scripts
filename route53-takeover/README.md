@@ -205,11 +205,6 @@ txt_records = [
     name  = "example.com"
     value = "v=spf1 include:_spf.google.com ~all"
     ttl   = 300
-  },
-  {
-    name  = "_dmarc.example.com"
-    value = "v=DMARC1; p=quarantine; rua=mailto:dmarc@example.com; ruf=mailto:dmarc@example.com; fo=1; adkim=s; aspf=s; pct=100; rf=afrf; ri=86400; sp=quarantine"
-    ttl   = 300
   }
 ]
 ```

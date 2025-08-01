@@ -48,7 +48,82 @@ The `scripts/extract-zone-records.sh` script extracts existing DNS records from 
 - You must manually copy/rename files to `variables/` with `.auto.tfvars` extension
 - Always review extracted files before using them in production
 
-## 📋 Variables Directory Files
+## 🚀 Taking Over an Existing Domain
+
+### Step 1: Extract Current Zone Configuration
+```bash
+# Extract existing DNS records
+./scripts/extract-zone-records.sh yourdomain.com your-aws-profile
+
+# Review generated files
+ls -la extracted/
+```
+
+### Step 2: Review and Prepare Variable Files
+```bash
+# Create variables directory if it doesn't exist
+mkdir -p variables/
+
+# Copy core configuration files
+cp extracted/domain.tfvars variables/domain.auto.tfvars
+cp extracted/aws.tfvars variables/aws.auto.tfvars
+
+# Copy desired record type files (review first!)
+cp extracted/a_records.tfvars variables/a_records.auto.tfvars
+cp extracted/mx_records.tfvars variables/mx_records.auto.tfvars
+# ... repeat for other needed record types
+```
+
+### Step 3: Review and Modify Variables
+1. **Edit** `variables/domain.auto.tfvars` - verify domain settings
+2. **Edit** `variables/aws.auto.tfvars` - confirm AWS configuration  
+3. **Review each record file** - validate extracted records are correct
+4. **Remove any empty files** or records you don't want to manage
+
+### Step 4: Plan and Apply
+```bash
+# Initialize Terraform
+terraform init
+
+# Plan the changes (should show import of existing zone)
+terraform plan
+
+# Apply the configuration
+terraform apply
+```
+
+### Step 5: Verify DNS Resolution
+```bash
+# Test DNS resolution
+dig yourdomain.com
+dig www.yourdomain.com
+# ... test other critical records
+```
+
+## ⚡ Quick Start for New Domains
+
+1. **Copy this repository**
+2. **Update** `variables/domain.auto.tfvars` with your domain details
+3. **Update** `variables/aws.auto.tfvars` with your AWS settings
+4. **Create/modify** record files in `variables/` as needed
+5. **Run** `terraform init && terraform plan && terraform apply`
+
+## 🛡️ Important Notes
+
+- **Always test in non-production first**
+- **DNS changes can take time to propagate** (TTL dependent)
+- **The extraction script is for discovery only** - files in `extracted/` are not used by Terraform
+- **Review all extracted records** before copying to `variables/`
+- **Backup existing DNS configuration** before making changes
+- **Monitor DNS resolution** after applying changes
+
+## 📚 Additional Resources
+
+- [AWS Route 53 Documentation](https://docs.aws.amazon.com/route53/)
+- [Terraform AWS Provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
+- [DNS Record Types Reference](https://en.wikipedia.org/wiki/List_of_DNS_record_types)
+
+## 📋 Variables Directory Files Reference
 
 Each file in the `variables/` directory corresponds to a specific DNS record type. All files use the `.auto.tfvars` extension for automatic loading by Terraform.
 
@@ -225,78 +300,3 @@ cloudfront_aliases = [
   }
 ]
 ```
-
-## 🚀 Taking Over an Existing Domain
-
-### Step 1: Extract Current Zone Configuration
-```bash
-# Extract existing DNS records
-./scripts/extract-zone-records.sh yourdomain.com your-aws-profile
-
-# Review generated files
-ls -la extracted/
-```
-
-### Step 2: Review and Prepare Variable Files
-```bash
-# Create variables directory if it doesn't exist
-mkdir -p variables/
-
-# Copy core configuration files
-cp extracted/domain.tfvars variables/domain.auto.tfvars
-cp extracted/aws.tfvars variables/aws.auto.tfvars
-
-# Copy desired record type files (review first!)
-cp extracted/a_records.tfvars variables/a_records.auto.tfvars
-cp extracted/mx_records.tfvars variables/mx_records.auto.tfvars
-# ... repeat for other needed record types
-```
-
-### Step 3: Review and Modify Variables
-1. **Edit** `variables/domain.auto.tfvars` - verify domain settings
-2. **Edit** `variables/aws.auto.tfvars` - confirm AWS configuration  
-3. **Review each record file** - validate extracted records are correct
-4. **Remove any empty files** or records you don't want to manage
-
-### Step 4: Plan and Apply
-```bash
-# Initialize Terraform
-terraform init
-
-# Plan the changes (should show import of existing zone)
-terraform plan
-
-# Apply the configuration
-terraform apply
-```
-
-### Step 5: Verify DNS Resolution
-```bash
-# Test DNS resolution
-dig yourdomain.com
-dig www.yourdomain.com
-# ... test other critical records
-```
-
-## ⚡ Quick Start for New Domains
-
-1. **Copy this repository**
-2. **Update** `variables/domain.auto.tfvars` with your domain details
-3. **Update** `variables/aws.auto.tfvars` with your AWS settings
-4. **Create/modify** record files in `variables/` as needed
-5. **Run** `terraform init && terraform plan && terraform apply`
-
-## 🛡️ Important Notes
-
-- **Always test in non-production first**
-- **DNS changes can take time to propagate** (TTL dependent)
-- **The extraction script is for discovery only** - files in `extracted/` are not used by Terraform
-- **Review all extracted records** before copying to `variables/`
-- **Backup existing DNS configuration** before making changes
-- **Monitor DNS resolution** after applying changes
-
-## 📚 Additional Resources
-
-- [AWS Route 53 Documentation](https://docs.aws.amazon.com/route53/)
-- [Terraform AWS Provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
-- [DNS Record Types Reference](https://en.wikipedia.org/wiki/List_of_DNS_record_types)

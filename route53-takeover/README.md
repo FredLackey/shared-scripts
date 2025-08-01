@@ -149,7 +149,7 @@ zone_comment = "Primary hosted zone for example.com"
 ### DNS Record Type Files
 
 #### `a_records.auto.tfvars`
-Standard A records (IPv4).
+**A records** map domain names to IPv4 addresses. These are the most common DNS records, used when you want a domain or subdomain to point to a specific server's IP address.
 ```hcl
 a_records = [
   {
@@ -161,7 +161,7 @@ a_records = [
 ```
 
 #### `aaaa_records.auto.tfvars`
-AAAA records (IPv6).
+**AAAA records** map domain names to IPv6 addresses. Use these when you have IPv6-enabled servers and want to support IPv6 connectivity for modern internet infrastructure.
 ```hcl
 aaaa_records = [
   {
@@ -173,7 +173,7 @@ aaaa_records = [
 ```
 
 #### `cname_records.auto.tfvars`
-CNAME records.
+**CNAME records** create aliases that point one domain name to another. Commonly used for `www` subdomains, CDN endpoints, or when you want multiple names to resolve to the same destination without duplicating IP addresses.
 ```hcl
 cname_records = [
   {
@@ -185,7 +185,7 @@ cname_records = [
 ```
 
 #### `mx_records.auto.tfvars`
-Mail exchange records.
+**MX records** specify mail servers responsible for handling email for your domain. The priority determines which server is tried first (lower numbers = higher priority). Essential for receiving email at your domain.
 ```hcl
 mx_records = [
   {
@@ -198,7 +198,7 @@ mx_records = [
 ```
 
 #### `txt_records.auto.tfvars`
-Text records (SPF, DMARC, verification, etc.).
+**TXT records** store arbitrary text data. Commonly used for email security (SPF, DKIM, DMARC), domain verification for services like Google/Microsoft, SSL certificate validation, and site ownership verification.
 ```hcl
 txt_records = [
   {
@@ -210,7 +210,7 @@ txt_records = [
 ```
 
 #### `ns_records.auto.tfvars`
-Name server records for subdomain delegation.
+**NS records** delegate authority for a subdomain to different name servers. Use when you want a subdomain managed by different DNS servers (e.g., delegating `api.example.com` to a third-party service).
 ```hcl
 ns_records = [
   {
@@ -222,7 +222,7 @@ ns_records = [
 ```
 
 #### `soa_records.auto.tfvars`
-Start of Authority record (optional custom SOA).
+**SOA records** define authoritative information about the DNS zone, including the primary name server, admin contact, and timing parameters for zone transfers. AWS Route 53 creates this automatically, but you can customize it if needed.
 ```hcl
 soa_record = {
   mname   = "ns1.example.com"
@@ -237,7 +237,7 @@ soa_record = {
 ```
 
 #### `srv_records.auto.tfvars`
-Service discovery records.
+**SRV records** specify the location (hostname and port) of servers providing specific services. Used for service discovery in protocols like SIP, XMPP, or Microsoft services. The format is `_service._protocol.domain`.
 ```hcl
 srv_records = [
   {
@@ -252,7 +252,7 @@ srv_records = [
 ```
 
 #### `ptr_records.auto.tfvars`
-Reverse DNS records.
+**PTR records** provide reverse DNS lookups, mapping IP addresses back to domain names. Essential for email servers (many mail servers reject emails from servers without proper reverse DNS) and network troubleshooting.
 ```hcl
 ptr_records = [
   {
@@ -263,10 +263,56 @@ ptr_records = [
 ]
 ```
 
+#### `caa_records.auto.tfvars`
+**CAA records** specify which Certificate Authorities (CAs) are authorized to issue SSL/TLS certificates for your domain. This adds security by preventing unauthorized certificate issuance, which helps protect against man-in-the-middle attacks.
+```hcl
+caa_records = [
+  {
+    name  = "example.com"
+    flags = 0
+    tag   = "issue"
+    value = "letsencrypt.org"
+    ttl   = 300
+  }
+]
+```
+
+#### `ds_records.auto.tfvars`
+**DS records** are used in DNSSEC (DNS Security Extensions) to establish a chain of trust for cryptographically signed DNS data. They contain a hash of a DNSKEY record and are placed in the parent zone to validate the child zone's authenticity.
+```hcl
+ds_records = [
+  {
+    name        = "secure.example.com"
+    key_tag     = 12345
+    algorithm   = 7
+    digest_type = 1
+    digest      = "1234567890ABCDEF1234567890ABCDEF12345678"
+    ttl         = 86400
+  }
+]
+```
+
+#### `naptr_records.auto.tfvars`
+**NAPTR records** provide complex name transformation rules, commonly used in telecommunications for services like SIP and ENUM. They specify how to convert one identifier into another through regular expressions and service parameters.
+```hcl
+naptr_records = [
+  {
+    name        = "example.com"
+    order       = 100
+    preference  = 10
+    flags       = "S"
+    service     = "SIP+D2U"
+    regexp      = "!^.*$!sip:customer-service@example.com!"
+    replacement = "_sip._udp.example.com"
+    ttl         = 300
+  }
+]
+```
+
 ### AWS Service Alias Files
 
 #### `api_aliases.auto.tfvars`
-API Gateway aliases.
+**API Gateway aliases** create friendly domain names for AWS API Gateway endpoints. Instead of using the default `abc123.execute-api.region.amazonaws.com` URL, you can use your own domain like `api.example.com`. This improves branding and allows you to change backends without updating client URLs.
 ```hcl
 api_aliases = [
   {
@@ -278,7 +324,7 @@ api_aliases = [
 ```
 
 #### `alb_aliases.auto.tfvars`
-Application Load Balancer aliases.
+**Application Load Balancer (ALB) aliases** point your custom domain to an AWS ALB. ALBs distribute incoming traffic across multiple targets (EC2 instances, containers, etc.) for high availability. Using aliases instead of A records provides automatic failover and health checking.
 ```hcl
 alb_aliases = [
   {
@@ -290,7 +336,7 @@ alb_aliases = [
 ```
 
 #### `cloudfront_aliases.auto.tfvars`
-CloudFront distribution aliases.
+**CloudFront aliases** connect your custom domain to an AWS CloudFront distribution. CloudFront is a Content Delivery Network (CDN) that caches your content globally for faster delivery. Aliases let you use `cdn.example.com` instead of the default `d123456.cloudfront.net` URL.
 ```hcl
 cloudfront_aliases = [
   {

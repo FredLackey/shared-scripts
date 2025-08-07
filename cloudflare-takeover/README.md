@@ -13,19 +13,21 @@ This Terraform configuration manages DNS infrastructure for domains using Cloudf
 - **Advanced record types** (CERT, DNSKEY, DS, HTTPS, LOC, NAPTR, OPENPGPKEY, SMIMEA, SSHFP, SVCB, TLSA, URI)
 - **Cloudflare-specific features** (proxying, comments, TTL management)
 - **Zone extraction tools** for importing existing configurations
+- **DNS cleanup utilities** for removing unmanaged records safely
 - **Modular variable structure** for easy maintenance
 
 ## 📁 Repository Structure
 
 ```
-├── README.md                    # This file
-├── main.tf                      # Main Terraform configuration
+├── README.md                          # This file
+├── main.tf                            # Main Terraform configuration
 ├── scripts/
-│   └── extract-zone-records.sh  # Zone extraction utility
-├── variables/                   # Variable files (auto-loaded)
-│   ├── *.auto.tfvars           # Production DNS records
-└── extracted/                   # Generated files from extraction script
-    └── *.tfvars                # Extracted zone data (NOT auto-loaded)
+│   ├── extract-zone-records.sh        # Zone extraction utility
+│   └── cleanup-unmanaged-records.sh   # DNS record cleanup utility
+├── variables/                         # Variable files (auto-loaded)
+│   ├── *.auto.tfvars                 # Production DNS records
+└── extracted/                         # Generated files from extraction script
+    └── *.tfvars                      # Extracted zone data (NOT auto-loaded)
 ```
 
 ## 🔧 Zone Extraction Script
@@ -58,6 +60,115 @@ The `scripts/extract-zone-records.sh` script extracts existing DNS records from 
 - The script generates `.tfvars` files (without `.auto`) for manual review
 - You must manually copy/rename files to `variables/` with `.auto.tfvars` extension
 - Always review extracted files before using them in production
+
+## 🧹 DNS Records Cleanup Script
+
+The `scripts/cleanup-unmanaged-records.sh` script identifies and removes DNS records that are NOT managed by Terraform. This is particularly useful for cleaning up records created by third-party services (like IONOS, Amazon SES, or other email providers) that may interfere with your Terraform-managed DNS configuration.
+
+### Purpose and Safety Features
+
+This script uses a **3-step filtering process** to ensure safe cleanup:
+1. **Find target records** - Locates records matching specified types and containing target strings
+2. **Identify managed records** - Checks for required safe strings in record comments (e.g., "terraform")
+3. **Delete unmanaged only** - Removes only records WITHOUT required safe strings
+
+### Usage
+
+```bash
+./scripts/cleanup-unmanaged-records.sh <cloudflare_token> [domains_file] [dry_run]
+```
+
+**Basic Examples:**
+```bash
+# Dry run (preview only) using default domains file
+./scripts/cleanup-unmanaged-records.sh your-cloudflare-api-token
+
+# Dry run with custom domains file
+./scripts/cleanup-unmanaged-records.sh your-token domains.txt true
+
+# Actually delete records (DANGER!)
+./scripts/cleanup-unmanaged-records.sh your-token domains.txt false
+```
+
+### Configuration
+
+The script is highly configurable through internal arrays:
+
+**Record Types to Check:**
+```bash
+RECORD_TYPES=("TXT" "CNAME" "MX")
+```
+
+**Target Strings (records must contain these):**
+```bash
+TARGET_STRINGS=(
+    "spf" "dmarc" "ionos" "workmail" "_domainkey"
+    "amazonses" "ses" "v=spf1" "v=DMARC1"
+)
+```
+
+**Required Safe Strings (records with these are kept):**
+```bash
+REQUIRED_CONTENT_STRINGS=("terraform")
+```
+
+### Domains File Format
+
+Create a text file with one domain per line:
+```
+example.com
+subdomain.example.org
+another-domain.net
+# Comments are ignored
+```
+
+### Safety Features
+
+- **Dry run by default** - Preview changes before executing
+- **Detailed logging** - Complete audit trail of all actions
+- **Configurable filtering** - Customize what gets targeted for cleanup
+- **Safe string protection** - Records with "terraform" (or other safe strings) in comments are never deleted
+- **Rate limiting** - 100ms delay between deletions to respect API limits
+
+### Example Output
+
+```
+🧹 DNS Records Cleanup Script
+=============================
+Domains file: domains.txt
+Dry run mode: true
+
+🎯 Target Configuration:
+Record types: TXT CNAME MX
+Target strings: spf dmarc ionos workmail _domainkey
+Required safe strings: terraform
+
+🔍 [1] Processing: example.com
+  🔎 Checking TXT records...
+    📋 Found Target Record: abc123def456
+       Type: TXT
+       Name: example.com
+       Content: v=spf1 include:spf.ionos.com ~all
+       Comment: 
+    🎯 UNSAFE (missing required string) - Target for deletion
+    🔍 DRY RUN - Would delete record abc123def456
+
+🎉 DNS Cleanup Summary
+=====================
+Domains processed: 1
+Target records found: 1
+Safe records (kept): 0
+Unsafe records found: 1
+Records that WOULD be deleted: 1
+```
+
+### Important Safety Notes
+
+- **ALWAYS run in dry-run mode first** to preview changes
+- **Review the log file** before executing actual deletions
+- **Backup your DNS configuration** before running cleanup
+- **Test in non-production environments** first
+- **The script respects Terraform-managed records** - add "terraform" to record comments to protect them
 
 ## 🚀 Taking Over an Existing Domain
 
@@ -120,6 +231,18 @@ dig www.yourdomain.com
 # ... test other critical records
 ```
 
+### Step 7: Clean Up Unmanaged Records (Optional)
+```bash
+# Create domains file for cleanup
+echo "yourdomain.com" > domains.txt
+
+# Preview what would be cleaned up (dry run)
+./scripts/cleanup-unmanaged-records.sh your-cloudflare-api-token domains.txt true
+
+# Review the generated log file, then optionally execute cleanup
+./scripts/cleanup-unmanaged-records.sh your-cloudflare-api-token domains.txt false
+```
+
 ## ⚡ Quick Start for New Domains
 
 1. **Copy this repository**
@@ -133,6 +256,7 @@ dig www.yourdomain.com
 - **Always test in non-production first**
 - **DNS changes can take time to propagate** (TTL dependent)
 - **The extraction script is for discovery only** - files in `extracted/` are not used by Terraform
+- **The cleanup script uses dry-run by default** - always preview before actual deletions
 - **Review all extracted records** before copying to `variables/`
 - **Backup existing DNS configuration** before making changes
 - **Monitor DNS resolution** after applying changes
